@@ -41,6 +41,7 @@ const Usuario = sequelize2.define('usuarios', {
     }
 })
 
+
 /* Inserindo dados na tabela usuários
 Usuario.create({
     nome: "Jaíne",
