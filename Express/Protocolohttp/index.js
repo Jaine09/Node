@@ -20,9 +20,10 @@ const sequelize2 = new sequelize('testenode', 'root', '',{
 
 //criar rota
 app.get('/cad', function(req, res){
-    res.render('formulario')
+    res.render('formulario.handlebars')
 })
 
+//uma nova rota post
 app.post('/add', function(req,res){
     res.send('FORMULARIO RECEBIDO')
 })
