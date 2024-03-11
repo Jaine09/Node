@@ -7,3 +7,4 @@ console.log(somaFunc(1,2));
 console.log(subFunc(2,2));
 console.log(mulFunc(2,2));
 console.log(divFunc(4,2));
+
