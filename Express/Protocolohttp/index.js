@@ -5,27 +5,46 @@ const app = express() //Instancia para requisitar qualquer coisa do pacote
 //chamando a bilioteca handlebars
 const handlebars = require('express-handlebars')
 
-// biblioteca sequelize
-const sequelize = require('sequelize')
+//chamando a biblioteca body-parser (ágiliza a ocnexão do banco com o backend)
+const bodyParser = require('body-parser')
 
-// configuro o handlebars e o templete
-app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}))
+//reuisição da minha tabela (após expostar a tabela deve ser requisitada)
+const post = require('./post')
+
+// configurando o handlebars e o templete engine
+app.engine('handlebars', handlebars.engine({defaultLayout: 'main', runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+}}))
 app.set('view.engine', 'handlebars')
 
-//conexão com o banco de dados
-const sequelize2 = new sequelize('testenode', 'root', '',{
-    host: "localhost",
-    dialect: 'mysql' 
-})
+//Configurando a body-parser
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 //criar rota
-app.get('/cad', function(req, res){
+app.get('/cad', function(req,res){
     res.render('formulario.handlebars')
+})
+
+//rota para a home, pegar tudo que está no banco e exibir na tela
+app.get('/', function(req,res){
+post.findAll({order: [['id', 'DESC']]}).then(function(posts){ 
+    res.render('home.handlebars', {posts: posts})
+})
 })
 
 //uma nova rota post
 app.post('/add', function(req,res){
-    res.send('FORMULARIO RECEBIDO')
+    post.create({
+        titulo: req.body.titulo,
+        conteudo: req.body.conteudo
+    })
+    .then(function(){
+        res.redirect('/')
+    }).catch(function(erro){
+        res.send("Houve um erro: " + erro)
+    })
 })
 
 //Porta do protocolo http
@@ -37,5 +56,3 @@ app.listen(8081, function(){
  http.createServer(function(req, res)// requisição e resposta{
  res.end("Porta OK");
  }).listen(8081);*/ //Conectando o cliente no servidor Listen: informa a porta
-
-
