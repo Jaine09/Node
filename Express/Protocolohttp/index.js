@@ -47,6 +47,16 @@ app.post('/add', function(req,res){
     })
 })
 
+//criando a rota para deletar
+app.get('/deletar/:id', function(req,res){
+    post.destroy({where: {'id': req.params.id}})
+    .then(function(){
+        res.send("Postagem deletada")
+    }).catch(function(erro){
+        res.send("Essa postagem não exite")
+    })
+})
+
 //Porta do protocolo http
 app.listen(8081, function(){
     console.log("O servidor está rodando no endereço http://localhost:8081")
